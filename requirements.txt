@@ -8,7 +8,7 @@ mat73>=0.62
 h5py>=3.8
 
 # 시각화
-matplotlib>=3.7
+matplotlib>=3.9
 seaborn>=0.12
 
 # 모델링 (DAY2)
