@@ -1,0 +1,33 @@
+# ===== 데이터 (용량 큼, Kaggle에서 별도 다운로드) =====
+data/*
+!data/README.md
+processed/
+*.mat
+*.pkl
+*.pickle
+*.parquet
+*.h5
+
+# ===== Python =====
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+
+# ===== 가상환경 =====
+.venv/
+venv/
+env/
+.conda/
+
+# ===== Jupyter =====
+.ipynb_checkpoints/
+
+# ===== IDE / OS =====
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# ===== 환경변수 / 비밀키 =====
+.env
