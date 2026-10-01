@@ -19,12 +19,16 @@ ESS 운영에서 배터리 교체 시점 계획과 예지 보전(PdM)에 활용�
 ├── processed/                  # 자동 생성 (git 제외)
 │   ├── raw_b1~b3.pkl           #   배치별 추출 캐시
 │   ├── battery_data.pkl        #   정제 결과 (셀 정보, 사이클 summary, Qdlin)
-│   └── features_day1.csv       #   셀 단위 초기 사이클 피처 (DAY2 입력)
+│   ├── features_day1.csv       #   DAY1 노트북 피처 (검증 기준값)
+│   └── features.csv            #   셀 단위 초기 사이클 피처 (DAY2 입력, src.features 생성)
+├── src/
+│   ├── __init__.py
+│   ├── preprocess.py           # 데이터 로드, 정제, 저장
+│   └── features.py             # 셀 단위 피처 계산 (ΔQ(V), 초기 사이클), 피처 세트 정의
 ├── notebooks/
 │   └── 01_EDA.ipynb            # DAY1 EDA (Q1~Q5)
 ├── results/
 │   └── figures/                # EDA 그래프
-├── preprocess.py               # 데이터 로드, 정제, 저장
 ├── requirements.txt
 └── README.md
 ```
@@ -37,8 +41,8 @@ cd ess-battery-life
 python3 -m venv .venv && source .venv/bin/activate     # Python 3.13
 pip install -r requirements.txt
 # data/README.md 안내에 따라 .mat 파일 3개를 data/ 에 배치
-python preprocess.py                                     # processed/battery_data.pkl 생성
-# notebooks/01_EDA.ipynb 실행 → processed/features_day1.csv 생성
+python -m src.preprocess                                 # processed/battery_data.pkl 생성
+python -m src.features                                   # processed/features.csv 생성
 ```
 
 

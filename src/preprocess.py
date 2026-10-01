@@ -7,8 +7,10 @@ DS Mini Project - DAY1 0단계: 데이터 준비
 4) EOL(0.88Ah) 도달 여부로 cycle_life 재검증
 5) 제외 셀 표시 (삭제하지 않고 플래그만) -> 최종 pickle 저장
 
-사용법 (노트북):
-    from preprocess import run_all
+사용법:
+    python -m src.preprocess               # 프로젝트 루트에서 실행
+
+    from src.preprocess import run_all     # 노트북 (sys.path에 프로젝트 루트 추가)
     data = run_all()                       # 최초 1회: .mat 로드 (수 분 소요)
     data = run_all()                       # 이후: 캐시에서 바로 로드
     cell_info, summary = data['cell_info'], data['summary']
@@ -34,9 +36,9 @@ import scipy.io as sio
 # 프로젝트 구조:  DS Mini Project/
 #                   ├── data/          (.mat 4개)
 #                   ├── processed/     (자동 생성: 캐시 & 결과)
-#                   └── preprocess.py
-# preprocess.py 위치 기준이라 노트북을 어디서 실행해도 경로가 안 깨짐
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+#                   └── src/preprocess.py
+# 이 파일 위치(src/)의 상위 폴더 = 프로젝트 루트 기준이라 노트북을 어디서 실행해도 경로가 안 깨짐
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DATA_DIR = os.path.join(BASE_DIR, 'data')
 OUT_DIR = os.path.join(BASE_DIR, 'processed')
 
