@@ -19,12 +19,29 @@ ESS 운영에서 배터리 교체 시점 계획과 예지 보전(PdM)에 활용�
 ├── processed/                  # 자동 생성 (git 제외)
 │   ├── raw_b1~b3.pkl           #   배치별 추출 캐시
 │   ├── battery_data.pkl        #   정제 결과 (셀 정보, 사이클 summary, Qdlin)
-│   └── features_day1.csv       #   셀 단위 초기 사이클 피처 (DAY2 입력)
+│   ├── features_day1.csv       #   DAY1 노트북 피처 (검증 기준값)
+│   └── features.csv            #   셀 단위 초기 사이클 피처 (DAY2 입력)
+├── src/
+│   ├── preprocess.py           # 데이터 로드, 정제, 저장
+│   ├── features.py             # 셀 단위 피처 계산 (ΔQ(V), 초기 사이클), 피처 세트 A/B/C
+│   ├── split.py                # Batch 1 정책 단위 학습 / Hold-out 분할
+│   ├── train.py                # 파이프라인, 모델 비교 (Step 3), Hold-out 반복 안정성 (Step 4)
+│   ├── paper_split.py          # 논문 조건 근사 재현 (Batch 1+2 교대 분할)
+│   └── evaluate.py             # 오류 분석 표·그래프
 ├── notebooks/
-│   └── 01_EDA.ipynb            # DAY1 EDA (Q1~Q5)
+│   ├── 01_EDA.ipynb            # DAY1 EDA (Q1~Q5)
+│   └── 02_modeling.ipynb       # DAY2 오류 분석 (src.evaluate 호출)
+├── models/                     # 학습된 모델 *.joblib (자동 생성, git 제외)
 ├── results/
-│   └── figures/                # EDA 그래프
-├── preprocess.py               # 데이터 로드, 정제, 저장
+│   ├── figures/                # EDA 그래프 (Q*), DAY2 그래프 (D2_*)
+│   ├── split.json              # 학습 / Hold-out 셀 목록
+│   ├── model_comparison.csv    # 모델별 Train / Valid / Batch 2 / Batch 3 MAPE
+│   ├── model_performance.csv   # 성능표 (노션 포맷, 최종 C_elasticnet + 기준 A_linear)
+│   ├── predictions.csv         # 모델 × 셀 예측
+│   ├── holdout_repeats*.csv    # Hold-out 20회 반복 Valid MAPE
+│   ├── paper_split_*.csv       # 논문 조건 근사 재현 결과
+│   ├── error_*.csv             # 오류 분석 (Batch 2 구조별, Batch 3 노이즈 셀, 오차 상위 10셀)
+│   └── c_elasticnet_coef.csv   # 최종 모델 계수, 배치별 상관, 반복 분할 선택 횟수
 ├── requirements.txt
 └── README.md
 ```
@@ -37,8 +54,13 @@ cd ess-battery-life
 python3 -m venv .venv && source .venv/bin/activate     # Python 3.13
 pip install -r requirements.txt
 # data/README.md 안내에 따라 .mat 파일 3개를 data/ 에 배치
-python preprocess.py                                     # processed/battery_data.pkl 생성
-# notebooks/01_EDA.ipynb 실행 → processed/features_day1.csv 생성
+python -m src.preprocess       # processed/battery_data.pkl 생성 (최초 1회 .mat 로드, 수 분 소요)
+python -m src.features         # processed/features.csv
+python -m src.split            # results/split.json
+python -m src.train            # 모델 비교 + Hold-out 반복 (--step 3 / --step 4 로 개별 실행)
+python -m src.paper_split      # 논문 조건 근사 재현 (최종 + 기준 모델, --model 로 다른 모델 지정)
+python -m src.evaluate         # 오류 분석 표·그래프, 최종 모델 계수표 (--model 로 다른 모델 지정)
+# notebooks/02_modeling.ipynb : 위 결과 파일을 읽어 오류 분석 표·그래프 표시
 ```
 
 ---
@@ -295,18 +317,51 @@ python preprocess.py                                     # processed/battery_dat
 
 ## 성능 결과
 
-(DAY2 작성)
+- 최종 모델 : **C_elasticnet** (피처 세트 C, ElasticNet) — 선택 규칙(Valid MAPE 최저, 1%p 이내면 더 단순한 모델) 적용
+- 기준 모델 : **A_linear** (피처 세트 A = log_var, LinearRegression)
+- 출처 : `results/model_performance.csv`
 
-| 구분                     | MAPE (%) | 비고                           |
-| ------------------------ | -------- | ------------------------------ |
-| Train (Batch 1 CV)       |          |                                |
-| Valid (Batch 1 Hold-out) |          |                                |
-| Test (Batch 2)           |          |                                |
-| Gap (Train − Valid)      |          | (+) : 과적합 의심              |
-| Gap (Valid − Test)       |          | (+) : 배치 간 일반화 저하 의심 |
-| Gap (Target − Test)      |          | Target : 원논문 9.1%           |
-| Test (Batch 3)           |          |                                |
-| Gap (Batch 2 − Batch 3)  |          | Test 성능 간 비교              |
+| 구분                     | C_elasticnet (최종) | A_linear (기준) | 비고                           |
+| ------------------------ | ------------------- | --------------- | ------------------------------ |
+| Train (Batch 1 CV)       | 5.91                | 8.87            |                                |
+| Valid (Batch 1 Hold-out) | 5.61                | 8.47            |                                |
+| Test (Batch 2)           | 25.63               | 28.56           |                                |
+| Gap (Train − Valid)      | -0.30               | -0.41           | (+) : 과적합 의심                   |
+| Gap (Valid − Test)       | 20.02               | 20.09           | (+) : 배치 간 일반화 저하 의심           |
+| Gap (Target − Test)      | 16.53               | 19.46           | Target : 원논문 9.1%              |
+| Test (Batch 3)           | 13.21               | 12.81           |                                |
+| Gap (Batch 2 − Batch 3)  | -12.41              | -15.75          | Test 성능 간 비교                   |
+
+- 계산식 : Gap(Train − Valid) = Valid − Train, Gap(Valid − Test) = Batch 2 − Valid, Gap(Target − Test) = Batch 2 − 9.1, Gap(Batch 2 − Batch 3) = Batch 3 − Batch 2 → (+)는 뒤 항목에서 MAPE가 커짐
+- Train : 학습 29셀에서 정책 단위 GroupKFold(5), best 파라미터의 fold 평균 / Valid : Hold-out 7셀 (4개 정책) / Test : Batch 1 전체 36셀로 재학습 후 평가
+
+### 모델 비교 (`results/model_comparison.csv`, `results/holdout_repeats.csv`)
+
+| 모델         | 피처 세트  | Train (CV) | Valid | Valid 20회 반복 (평균 ± std) | Batch 2 | Batch 3 | best params                                       |
+| ------------ | ---------- | ---------- | ----- | ---------------------------- | ------- | ------- | ------------------------------------------------- |
+| A_linear     | A_variance | 8.87       | 8.47  | 9.63 ± 2.55                  | 28.56   | 12.81   | –                                                 |
+| B_ridge      | B_deltaQ   | 8.99       | 11.41 | 10.36 ± 2.65                 | 30.32   | 12.20   | alpha=10                                          |
+| B_elasticnet | B_deltaQ   | 9.20       | 10.31 | 10.00 ± 2.48                 | 30.11   | 12.34   | alpha=0.0316, l1_ratio=0.1                        |
+| C_elasticnet | C_full     | 5.91       | 5.61  | 6.66 ± 2.95                  | 25.63   | 13.21   | alpha=0.00316, l1_ratio=0.9                       |
+| B_rf         | B_deltaQ   | 9.63       | 10.21 | 11.29 ± 3.20                 | 29.84   | 18.18   | max_depth=2, min_samples_leaf=2                   |
+| B_gbr        | B_deltaQ   | 8.96       | 9.69  | 11.19 ± 4.45                 | 31.67   | 18.68   | learning_rate=0.05, max_depth=1, n_estimators=100 |
+
+(MAPE %, 사이클 단위. Valid 20회 반복 : seed 0~19 정책 단위 분할, 모델 선택에는 사용하지 않음)
+
+![](results/figures/D2_mape_by_model.png)
+
+### 논문 비교 (`results/paper_split_comparison.csv`)
+
+| 조건                                   | 모델         | 학습 셀 | 테스트 셀 | Train (CV) | Train (fit) | Test  | Secondary test (Batch 3) |
+| -------------------------------------- | ------------ | ------- | --------- | ---------- | ----------- | ----- | ------------------------ |
+| 원논문 Table 1 (원문 확인 후 기입)     |              |         |           |            |             |       |                          |
+| 논문식 근사 (Batch 1+2 교대 분할)      | C_elasticnet | 38      | 37        | 11.03      | 7.62        | 13.74 | 15.68                    |
+| 우리 조건 (Batch 1만 학습, Test = B2)  | C_elasticnet | 36      | 39        | 5.91       | 4.61        | 25.63 | 13.21                    |
+| 논문식 근사 (Batch 1+2 교대 분할)      | A_linear     | 38      | 37        | 15.61      | 14.20       | 13.19 | 13.12                    |
+| 우리 조건 (Batch 1만 학습, Test = B2)  | A_linear     | 36      | 39        | 8.87       | 8.25        | 28.56 | 12.81                    |
+
+(MAPE %. 논문식 근사 : Batch 1+2를 cell_id(배치, 셀 번호) 순 정렬 후 교대로 train / test 배정. 원논문은 b1c0~c4를 Batch 2로 이어붙인 셀을 포함했고 셀 인덱스도 달라 **완전 재현이 아닌 근사**.
+Train (fit) : 학습 셀 in-sample, 우리 조건의 Train (CV)는 학습 29셀 기준)
 
 ## 오류 분석
 
