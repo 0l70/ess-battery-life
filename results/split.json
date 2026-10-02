@@ -1,0 +1,491 @@
+{
+  "method": "GroupShuffleSplit on Batch 1, groups = policy",
+  "train_batch": "b1",
+  "group_col": "policy",
+  "test_size": 0.2,
+  "random_state": 42,
+  "train_cells": [
+    "b1c11",
+    "b1c14",
+    "b1c15",
+    "b1c16",
+    "b1c17",
+    "b1c18",
+    "b1c19",
+    "b1c20",
+    "b1c21",
+    "b1c23",
+    "b1c24",
+    "b1c25",
+    "b1c26",
+    "b1c27",
+    "b1c28",
+    "b1c29",
+    "b1c30",
+    "b1c31",
+    "b1c32",
+    "b1c33",
+    "b1c34",
+    "b1c35",
+    "b1c36",
+    "b1c37",
+    "b1c42",
+    "b1c43",
+    "b1c44",
+    "b1c45",
+    "b1c9"
+  ],
+  "holdout_cells": [
+    "b1c38",
+    "b1c39",
+    "b1c40",
+    "b1c41",
+    "b1c5",
+    "b1c6",
+    "b1c7"
+  ],
+  "train_policies": [
+    "5.4C(40%)-3.6C",
+    "5.4C(50%)-3C",
+    "5.4C(60%)-3.6C",
+    "5.4C(60%)-3C",
+    "5.4C(70%)-3C",
+    "5.4C(80%)-5.4C",
+    "6C(30%)-3.6C",
+    "6C(40%)-3.6C",
+    "6C(40%)-3C",
+    "6C(50%)-3.6C",
+    "6C(50%)-3C",
+    "6C(60%)-3C",
+    "7C(30%)-3.6C",
+    "7C(40%)-3C",
+    "8C(25%)-3.6C",
+    "8C(35%)-3.6C"
+  ],
+  "holdout_policies": [
+    "4.4C(80%)-4.4C",
+    "4.8C(80%)-4.8C",
+    "7C(40%)-3.6C",
+    "8C(15%)-3.6C"
+  ],
+  "summary": {
+    "train": {
+      "n_cells": 29,
+      "n_policies": 16,
+      "life_min": 534.0,
+      "life_median": 757.0,
+      "life_max": 1054.0
+    },
+    "holdout": {
+      "n_cells": 7,
+      "n_policies": 4,
+      "life_min": 617.0,
+      "life_median": 870.0,
+      "life_max": 1074.0
+    }
+  },
+  "repeats": [
+    {
+      "seed": 0,
+      "n_train": 29,
+      "n_holdout": 7,
+      "holdout_cells": [
+        "b1c23",
+        "b1c42",
+        "b1c43",
+        "b1c44",
+        "b1c45",
+        "b1c6",
+        "b1c7"
+      ],
+      "holdout_policies": [
+        "4.8C(80%)-4.8C",
+        "6C(30%)-3.6C",
+        "8C(25%)-3.6C",
+        "8C(35%)-3.6C"
+      ]
+    },
+    {
+      "seed": 1,
+      "n_train": 29,
+      "n_holdout": 7,
+      "holdout_cells": [
+        "b1c11",
+        "b1c18",
+        "b1c19",
+        "b1c24",
+        "b1c25",
+        "b1c36",
+        "b1c37"
+      ],
+      "holdout_policies": [
+        "5.4C(50%)-3C",
+        "5.4C(70%)-3C",
+        "6C(40%)-3C",
+        "7C(40%)-3C"
+      ]
+    },
+    {
+      "seed": 2,
+      "n_train": 29,
+      "n_holdout": 7,
+      "holdout_cells": [
+        "b1c16",
+        "b1c17",
+        "b1c28",
+        "b1c29",
+        "b1c42",
+        "b1c43",
+        "b1c5"
+      ],
+      "holdout_policies": [
+        "4.4C(80%)-4.4C",
+        "5.4C(60%)-3.6C",
+        "6C(50%)-3C",
+        "8C(25%)-3.6C"
+      ]
+    },
+    {
+      "seed": 3,
+      "n_train": 29,
+      "n_holdout": 7,
+      "holdout_cells": [
+        "b1c34",
+        "b1c35",
+        "b1c40",
+        "b1c41",
+        "b1c6",
+        "b1c7",
+        "b1c9"
+      ],
+      "holdout_policies": [
+        "4.8C(80%)-4.8C",
+        "5.4C(40%)-3.6C",
+        "7C(30%)-3.6C",
+        "8C(15%)-3.6C"
+      ]
+    },
+    {
+      "seed": 4,
+      "n_train": 29,
+      "n_holdout": 7,
+      "holdout_cells": [
+        "b1c11",
+        "b1c18",
+        "b1c19",
+        "b1c42",
+        "b1c43",
+        "b1c44",
+        "b1c45"
+      ],
+      "holdout_policies": [
+        "5.4C(50%)-3C",
+        "5.4C(70%)-3C",
+        "8C(25%)-3.6C",
+        "8C(35%)-3.6C"
+      ]
+    },
+    {
+      "seed": 5,
+      "n_train": 29,
+      "n_holdout": 7,
+      "holdout_cells": [
+        "b1c14",
+        "b1c15",
+        "b1c40",
+        "b1c41",
+        "b1c44",
+        "b1c45",
+        "b1c9"
+      ],
+      "holdout_policies": [
+        "5.4C(40%)-3.6C",
+        "5.4C(60%)-3C",
+        "8C(15%)-3.6C",
+        "8C(35%)-3.6C"
+      ]
+    },
+    {
+      "seed": 6,
+      "n_train": 28,
+      "n_holdout": 8,
+      "holdout_cells": [
+        "b1c14",
+        "b1c15",
+        "b1c18",
+        "b1c19",
+        "b1c20",
+        "b1c21",
+        "b1c40",
+        "b1c41"
+      ],
+      "holdout_policies": [
+        "5.4C(60%)-3C",
+        "5.4C(70%)-3C",
+        "5.4C(80%)-5.4C",
+        "8C(15%)-3.6C"
+      ]
+    },
+    {
+      "seed": 7,
+      "n_train": 29,
+      "n_holdout": 7,
+      "holdout_cells": [
+        "b1c14",
+        "b1c15",
+        "b1c40",
+        "b1c41",
+        "b1c6",
+        "b1c7",
+        "b1c9"
+      ],
+      "holdout_policies": [
+        "4.8C(80%)-4.8C",
+        "5.4C(40%)-3.6C",
+        "5.4C(60%)-3C",
+        "8C(15%)-3.6C"
+      ]
+    },
+    {
+      "seed": 8,
+      "n_train": 28,
+      "n_holdout": 8,
+      "holdout_cells": [
+        "b1c18",
+        "b1c19",
+        "b1c20",
+        "b1c21",
+        "b1c30",
+        "b1c31",
+        "b1c38",
+        "b1c39"
+      ],
+      "holdout_policies": [
+        "5.4C(70%)-3C",
+        "5.4C(80%)-5.4C",
+        "6C(50%)-3.6C",
+        "7C(40%)-3.6C"
+      ]
+    },
+    {
+      "seed": 9,
+      "n_train": 29,
+      "n_holdout": 7,
+      "holdout_cells": [
+        "b1c11",
+        "b1c14",
+        "b1c15",
+        "b1c18",
+        "b1c19",
+        "b1c20",
+        "b1c21"
+      ],
+      "holdout_policies": [
+        "5.4C(50%)-3C",
+        "5.4C(60%)-3C",
+        "5.4C(70%)-3C",
+        "5.4C(80%)-5.4C"
+      ]
+    },
+    {
+      "seed": 10,
+      "n_train": 28,
+      "n_holdout": 8,
+      "holdout_cells": [
+        "b1c14",
+        "b1c15",
+        "b1c18",
+        "b1c19",
+        "b1c20",
+        "b1c21",
+        "b1c24",
+        "b1c25"
+      ],
+      "holdout_policies": [
+        "5.4C(60%)-3C",
+        "5.4C(70%)-3C",
+        "5.4C(80%)-5.4C",
+        "6C(40%)-3C"
+      ]
+    },
+    {
+      "seed": 11,
+      "n_train": 29,
+      "n_holdout": 7,
+      "holdout_cells": [
+        "b1c11",
+        "b1c14",
+        "b1c15",
+        "b1c18",
+        "b1c19",
+        "b1c24",
+        "b1c25"
+      ],
+      "holdout_policies": [
+        "5.4C(50%)-3C",
+        "5.4C(60%)-3C",
+        "5.4C(70%)-3C",
+        "6C(40%)-3C"
+      ]
+    },
+    {
+      "seed": 12,
+      "n_train": 28,
+      "n_holdout": 8,
+      "holdout_cells": [
+        "b1c20",
+        "b1c21",
+        "b1c26",
+        "b1c27",
+        "b1c32",
+        "b1c33",
+        "b1c44",
+        "b1c45"
+      ],
+      "holdout_policies": [
+        "5.4C(80%)-5.4C",
+        "6C(40%)-3.6C",
+        "6C(60%)-3C",
+        "8C(35%)-3.6C"
+      ]
+    },
+    {
+      "seed": 13,
+      "n_train": 29,
+      "n_holdout": 7,
+      "holdout_cells": [
+        "b1c28",
+        "b1c29",
+        "b1c30",
+        "b1c31",
+        "b1c5",
+        "b1c6",
+        "b1c7"
+      ],
+      "holdout_policies": [
+        "4.4C(80%)-4.4C",
+        "4.8C(80%)-4.8C",
+        "6C(50%)-3.6C",
+        "6C(50%)-3C"
+      ]
+    },
+    {
+      "seed": 14,
+      "n_train": 29,
+      "n_holdout": 7,
+      "holdout_cells": [
+        "b1c14",
+        "b1c15",
+        "b1c44",
+        "b1c45",
+        "b1c6",
+        "b1c7",
+        "b1c9"
+      ],
+      "holdout_policies": [
+        "4.8C(80%)-4.8C",
+        "5.4C(40%)-3.6C",
+        "5.4C(60%)-3C",
+        "8C(35%)-3.6C"
+      ]
+    },
+    {
+      "seed": 15,
+      "n_train": 29,
+      "n_holdout": 7,
+      "holdout_cells": [
+        "b1c11",
+        "b1c26",
+        "b1c27",
+        "b1c38",
+        "b1c39",
+        "b1c44",
+        "b1c45"
+      ],
+      "holdout_policies": [
+        "5.4C(50%)-3C",
+        "6C(40%)-3.6C",
+        "7C(40%)-3.6C",
+        "8C(35%)-3.6C"
+      ]
+    },
+    {
+      "seed": 16,
+      "n_train": 29,
+      "n_holdout": 7,
+      "holdout_cells": [
+        "b1c11",
+        "b1c36",
+        "b1c37",
+        "b1c38",
+        "b1c39",
+        "b1c40",
+        "b1c41"
+      ],
+      "holdout_policies": [
+        "5.4C(50%)-3C",
+        "7C(40%)-3.6C",
+        "7C(40%)-3C",
+        "8C(15%)-3.6C"
+      ]
+    },
+    {
+      "seed": 17,
+      "n_train": 30,
+      "n_holdout": 6,
+      "holdout_cells": [
+        "b1c11",
+        "b1c32",
+        "b1c33",
+        "b1c34",
+        "b1c35",
+        "b1c9"
+      ],
+      "holdout_policies": [
+        "5.4C(40%)-3.6C",
+        "5.4C(50%)-3C",
+        "6C(60%)-3C",
+        "7C(30%)-3.6C"
+      ]
+    },
+    {
+      "seed": 18,
+      "n_train": 30,
+      "n_holdout": 6,
+      "holdout_cells": [
+        "b1c11",
+        "b1c16",
+        "b1c17",
+        "b1c44",
+        "b1c45",
+        "b1c5"
+      ],
+      "holdout_policies": [
+        "4.4C(80%)-4.4C",
+        "5.4C(50%)-3C",
+        "5.4C(60%)-3.6C",
+        "8C(35%)-3.6C"
+      ]
+    },
+    {
+      "seed": 19,
+      "n_train": 29,
+      "n_holdout": 7,
+      "holdout_cells": [
+        "b1c11",
+        "b1c20",
+        "b1c21",
+        "b1c32",
+        "b1c33",
+        "b1c36",
+        "b1c37"
+      ],
+      "holdout_policies": [
+        "5.4C(50%)-3C",
+        "5.4C(80%)-5.4C",
+        "6C(60%)-3C",
+        "7C(40%)-3C"
+      ]
+    }
+  ]
+}

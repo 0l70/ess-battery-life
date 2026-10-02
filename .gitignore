@@ -34,3 +34,5 @@ Thumbs.db
 
 # ===== Plan File ======
 DAY2_PLAN.md
+# ===== 학습된 모델 =====
+models/
